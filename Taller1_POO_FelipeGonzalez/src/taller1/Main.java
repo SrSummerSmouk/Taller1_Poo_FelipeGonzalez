@@ -6,43 +6,66 @@ import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class Main {
+	//guardar lectura arch - Alumnos.txt 
+	static String[] nombresAlumnos = new String[100];
+	static String[] apellidosAlumnos = new String[100];
+	static String[] rutsAlumnos = new String[100];
+	static String[] paralelosAlumnos = new String[100];
+	//guardar lectura arch - Solicitud.txt
+	static String[] nombresSolicitud = new String[100];
+	static String[] apellidosSolicitud = new String[100];
+	
+ 
+	static int cantidadAlumnos = 0;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
+		menu();
 	}
 
 	/**
 	 * lectura del archivo Alumnos.txt
-	 * 
-	 * @throws FileNotFoundException
 	 */
 	private static void lecturaAlumnos() {
 		// nombre;apellido;rut;paralelo
 		Scanner scanner;
 		try {
 			scanner = new Scanner(new File("Alumnos.txt"));
-			while (scanner.hasNextLine()) {
+			/*
+			 * Aclaraciones Capacidad de los vectores: Existirán como máximo 100 personas en
+			 * cada archivo. El programa no debe caerse si se alcanza el límite: debe avisar
+			 * que no hay espacio. - (esto dice en el taller asique lo tomare como limitante
+			 * en lectura)
+			 */
+			while (scanner.hasNextLine() && cantidadAlumnos < 100) {
 				String line = scanner.nextLine().trim();
 				String[] partes = line.split(";");
-				String nombreAlumno = partes[0];
-				String apellidoAlumno = partes[1];
-				String rutAlumno = partes[2];
-				String paralelo = partes[3];
+
+				nombresAlumnos[cantidadAlumnos] = partes[0];
+				apellidosAlumnos[cantidadAlumnos] = partes[1];
+				rutsAlumnos[cantidadAlumnos] = partes[2];
+				paralelosAlumnos[cantidadAlumnos] = partes[3];
+
+				cantidadAlumnos++;
+			}
+
+			if (scanner.hasNextLine()) {
+				System.out.println("Se ha alcanzado el maximo de espacio (100)\n"
+						+ "Aviso: El resto de lineas seran ignoradas.\n");
+			} else {
+				System.out.println("archivo cargado (Alumnos.txt.)");
 			}
 			scanner.close();
 
 		} catch (FileNotFoundException e) {
 			// TODO Auto-generated catch block
 			System.out.println("Error: No se ha encontrado el archivo Alumnos.txt.");
-			e.printStackTrace();
 		}
 
 	}
 
 	/**
 	 * lectura del archivo Solicitudes.txt
-	 * 
-	 * @throws FileNotFoundException
 	 */
 	private static void lectorSolicitud() {
 		// nombre-apellido
@@ -79,7 +102,31 @@ public class Main {
 				opcion = Integer.parseInt(in);
 			} catch (NumberFormatException e) {
 				// TODO: handle exception
+				// con suerte esto deberia de hacer que en el default me tire el error para
+				// valor deseado
 				opcion = -1;
+			}
+			switch (opcion) {
+
+			case 1:
+				// Cargar Archivos
+				lectorSolicitud();
+				lecturaAlumnos();
+				break;
+
+			case 2:
+				// Procesar Solicitudes - Filtro Automatico
+				break;
+
+			case 7:
+				// Salir
+				System.out.println("AVISO: Saliendo del sistema.");
+				break;
+
+			default:
+				// valor invalido
+				System.out.println("ingrese valor valido. (numero entre 1 y 7) ");
+
 			}
 
 		} while (opcion != 7);
