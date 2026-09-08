@@ -16,8 +16,21 @@ public class Main {
 	static String[] nombresSolicitud = new String[100];
 	static String[] apellidosSolicitud = new String[100];
 
+	// guardar Alumnos Aceptados
+	static String[] nombresAlumnosAceptados = new String[100];
+	static String[] apellidosAlumnosAceptados = new String[100];
+	static String[] rutsAlumnosAceptados = new String[100];
+	static String[] paralelosAlumnosAceptados = new String[100];
+
+	// guardar Alumnos Rechazados
+	static String[] nombresAlumnosRechazados = new String[100];
+	static String[] apellidosAlumnosRechazados = new String[100];
+
+	// contadores
 	static int cantidadAlumnos = 0;
 	static int cantidadSolicitudes = 0;
+	static int contadorAdmitidos = 0;
+	static int contadorRechazados = 0;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
@@ -145,12 +158,57 @@ public class Main {
 		} while (opcion != 7);
 
 	}
-	
-	
+
 	private static void filtroSolcititud() {
-		for (String nombreA : nombresAlumnos) {
-			int indice = nombreA
+		System.out.println("---Procesando Solicitudes - Filtrando Automaticamente---\n");
+
+		// for que cuenta solo cantidad de solicitudes.
+		for (int i = 0; i < cantidadSolicitudes; i++) {
+			// bolean find para asegurarme de jugar entre !find para saber si se encontro o
+			// no
+
+			boolean find = false;
+			String nombSolicitud = nombresSolicitud[i];
+			String apeSolicitud = apellidosAlumnos[i];
+
+			for (int j = 0; j < cantidadAlumnos; j++) {
+				/*
+				 * "Recorre todas las solicitudes cargadas y, para cada una, verifica si existe en la lista"
+				 * basicamente me pide el taller comparar nombre y apellido asique eso hago.
+				 */
+				if (nombSolicitud.equalsIgnoreCase(nombresAlumnos[j])
+						&& apeSolicitud.equalsIgnoreCase(apellidosAlumnos[j])) {
+					System.out.println("[STATUS]: [OK] - " + nombSolicitud + " " + apeSolicitud + " | Admitido en: "
+							+ paralelosAlumnos[j]);
+
+					// guardado de los alumnos admitidos.
+					nombresAlumnosAceptados[contadorAdmitidos] = nombresAlumnos[j];
+					apellidosAlumnosAceptados[contadorAdmitidos] = apellidosAlumnos[j];
+					rutsAlumnosAceptados[contadorAdmitidos] = rutsAlumnos[j];
+					paralelosAlumnosAceptados[contadorAdmitidos] = paralelosAlumnos[j];
+
+					contadorAdmitidos++;
+					// cambio de find para saber q se encontro
+					find = true;
+					break;
+
+				}
+			}
+
+			if (!find) {
+				// same thing pero esta vez para los rechazados
+				System.out.println("[STATUS]: [X] - " + nombSolicitud + " " + apeSolicitud
+						+ " - [No Pertenece A Ningun Paralelo]");
+				nombresAlumnosRechazados[contadorRechazados] = nombSolicitud;
+				apellidosAlumnosRechazados[contadorRechazados] = apeSolicitud;
+
+				contadorRechazados++;
+
+			}
 		}
-		
+		// printeo de 2)Solicitud
+		System.out.println("\n Solicitudes | Filtrado - Ha finalizado\n " + "[RECHAZADOS]: " + contadorRechazados + "\n"
+				+ "[ADMITIDOS]: " + contadorAdmitidos);
+
 	}
 }
