@@ -122,6 +122,8 @@ public class Main {
 					+ "2) Procesar Solicitudes - Filtro Automatico\n" + "3) Incripcion Manual al Grupo\n"
 					+ "4) Administracion Del Curso\n" + "5) Generar Reporte\n" + "6) Analisis Estatico\n"
 					+ "7) Salir\n");
+
+			System.out.print("[TU OPCION]: ");
 			String in = scanner.nextLine();
 			try {
 				opcion = Integer.parseInt(in);
@@ -152,6 +154,9 @@ public class Main {
 							"[AVISO]: DEBE DE CARGAR ARCHIVOS ANTES PROCESAR SOLICITUDES - FILTRO AUTOMATICO.");
 				}
 				break;
+			case 3:
+				inscripcionManual();
+				break;
 
 			case 7:
 				// Salir
@@ -165,6 +170,7 @@ public class Main {
 			}
 
 		} while (opcion != 7);
+		scanner.close();
 
 	}
 
@@ -180,28 +186,23 @@ public class Main {
 			String nombSolicitud = nombresSolicitud[i];
 			String apeSolicitud = apellidosAlumnos[i];
 
-			for (int j = 0; j < cantidadAlumnos; j++) {
-				/*
-				 * "Recorre todas las solicitudes cargadas y, para cada una, verifica si existe en la lista"
-				 * basicamente me pide el taller comparar nombre y apellido asique eso hago.
-				 */
-				if (nombSolicitud.equalsIgnoreCase(nombresAlumnos[j])
-						&& apeSolicitud.equalsIgnoreCase(apellidosAlumnos[j])) {
-					System.out.println("[STATUS]: [OK] - " + nombSolicitud + " " + apeSolicitud + " | Admitido en: "
-							+ paralelosAlumnos[j]);
+			int encontrarJ = buscarAlumnoPorNombre(nombSolicitud, apeSolicitud);
 
-					// guardado de los alumnos admitidos.
-					nombresAlumnosAceptados[contadorAdmitidos] = nombresAlumnos[j];
-					apellidosAlumnosAceptados[contadorAdmitidos] = apellidosAlumnos[j];
-					rutsAlumnosAceptados[contadorAdmitidos] = rutsAlumnos[j];
-					paralelosAlumnosAceptados[contadorAdmitidos] = paralelosAlumnos[j];
+			if (encontrarJ != -1) {
+				System.out.println("[STATUS]: [OK] - " + nombSolicitud + " " + apeSolicitud + " | Admitido en: "
+						+ paralelosAlumnos[encontrarJ]);
 
-					contadorAdmitidos++;
-					// cambio de find para saber q se encontro
-					find = true;
-					break;
+				// guardado de los alumnos admitidos.
+				nombresAlumnosAceptados[contadorAdmitidos] = nombresAlumnos[encontrarJ];
+				apellidosAlumnosAceptados[contadorAdmitidos] = apellidosAlumnos[encontrarJ];
+				rutsAlumnosAceptados[contadorAdmitidos] = rutsAlumnos[encontrarJ];
+				paralelosAlumnosAceptados[contadorAdmitidos] = paralelosAlumnos[encontrarJ];
 
-				}
+				contadorAdmitidos++;
+				// cambio de find para saber q se encontro
+				find = true;
+				break;
+
 			}
 
 			if (!find) {
@@ -218,6 +219,49 @@ public class Main {
 		// printeo de 2)Solicitud
 		System.out.println("\n Solicitudes | Filtrado - Ha finalizado\n " + "[RECHAZADOS]: " + contadorRechazados + "\n"
 				+ "[ADMITIDOS]: " + contadorAdmitidos);
+
+	}
+
+	private static void inscripcionManual() {
+		Scanner sc = new Scanner(System.in);
+		int opcion = 0;
+		System.out.println("\n---Metodo de Incorporacion---\n" + "[1]: RUT\n" + "[2]: Nombre y Apellido\n");
+
+		/*
+		 * si esta parte la estoy reutilizado entera hasta nuevo aviso o hasta que
+		 * recuerde como no ser redundante un lunes a las 2:30am
+		 */
+		System.out.print("[TU OPCION]: ");
+		String in = sc.nextLine();
+		try {
+			opcion = Integer.parseInt(in);
+		} catch (NumberFormatException e) {
+			opcion = -1;
+		}
+
+		switch (opcion) {
+		case 1:
+
+			break;
+
+		default:
+			break;
+		}
+
+	}
+
+	private static int buscarAlumnoPorNombre(String nombre, String apellido) {
+		for (int j = 0; j < cantidadAlumnos; j++) {
+			/*
+			 * act: devido a que necesito esta funcion tanto para case 2 como case 3, derive
+			 * esto a "buscarAlumnoPorNombre" para evitar redundancia
+			 */
+			if (nombre.equalsIgnoreCase(nombresAlumnos[j]) && apellido.equalsIgnoreCase(apellidosAlumnos[j])) {
+				return j;
+
+			}
+		}
+		return -1;
 
 	}
 }
