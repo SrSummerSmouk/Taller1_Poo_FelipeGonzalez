@@ -3,20 +3,21 @@ package taller1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
-	//guardar lectura arch - Alumnos.txt 
+	// guardar lectura arch - Alumnos.txt
 	static String[] nombresAlumnos = new String[100];
 	static String[] apellidosAlumnos = new String[100];
 	static String[] rutsAlumnos = new String[100];
 	static String[] paralelosAlumnos = new String[100];
-	//guardar lectura arch - Solicitud.txt
+	// guardar lectura arch - Solicitud.txt
 	static String[] nombresSolicitud = new String[100];
 	static String[] apellidosSolicitud = new String[100];
-	
- 
+
 	static int cantidadAlumnos = 0;
+	static int cantidadSolicitudes = 0;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
@@ -48,10 +49,11 @@ public class Main {
 
 				cantidadAlumnos++;
 			}
-
+			// en caso de que quede mas lineas de las que puede tener las listas
 			if (scanner.hasNextLine()) {
-				System.out.println("Se ha alcanzado el maximo de espacio (100)\n"
+				System.out.println("Se ha alcanzado el limite de espacio (100)\n"
 						+ "Aviso: El resto de lineas seran ignoradas.\n");
+
 			} else {
 				System.out.println("archivo cargado (Alumnos.txt.)");
 			}
@@ -73,11 +75,21 @@ public class Main {
 		try {
 			scanner = new Scanner(new File("Solicitudes.txt"));
 
-			while (scanner.hasNextLine()) {
+			while (scanner.hasNextLine() && cantidadSolicitudes < 100) {
 				String line = scanner.nextLine().trim();
 				String[] partes = line.split("-");
-				String alumnoSolicitud = partes[0];
-				String apellidoSolicitud = partes[1];
+
+				nombresSolicitud[cantidadSolicitudes] = partes[0];
+				apellidosSolicitud[cantidadSolicitudes] = partes[1];
+				cantidadSolicitudes++;
+			}
+
+			// en caso de que quede mas lineas de las que puede tener las listas
+			if (scanner.hasNextLine()) {
+				System.out.println("Se ha alcanzado el limite de espacio (100)\n"
+						+ "Aviso: El resto de lineas seran ignoradas.\n");
+			} else {
+				System.out.println("archivo cargado (Solicitudes.txt.)");
 			}
 			scanner.close();
 		} catch (FileNotFoundException e) {
@@ -116,6 +128,7 @@ public class Main {
 
 			case 2:
 				// Procesar Solicitudes - Filtro Automatico
+				filtroSolcititud();
 				break;
 
 			case 7:
@@ -131,5 +144,13 @@ public class Main {
 
 		} while (opcion != 7);
 
+	}
+	
+	
+	private static void filtroSolcititud() {
+		for (String nombreA : nombresAlumnos) {
+			int indice = nombreA
+		}
+		
 	}
 }
