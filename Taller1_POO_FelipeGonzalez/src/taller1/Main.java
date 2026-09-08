@@ -131,27 +131,36 @@ public class Main {
 				// valor deseado
 				opcion = -1;
 			}
+
+			boolean archivosCargados = false;
+
 			switch (opcion) {
 
 			case 1:
 				// Cargar Archivos
 				lectorSolicitud();
 				lecturaAlumnos();
+				archivosCargados = true;
 				break;
 
 			case 2:
 				// Procesar Solicitudes - Filtro Automatico
-				filtroSolcititud();
+				if (archivosCargados) {
+					filtroSolcititud();
+				} else {
+					System.out.println(
+							"[AVISO]: DEBE DE CARGAR ARCHIVOS ANTES PROCESAR SOLICITUDES - FILTRO AUTOMATICO.");
+				}
 				break;
 
 			case 7:
 				// Salir
-				System.out.println("AVISO: Saliendo del sistema.");
+				System.out.println("[AVISO]: Saliendo del sistema.");
 				break;
 
 			default:
 				// valor invalido
-				System.out.println("ingrese valor valido. (numero entre 1 y 7) ");
+				System.out.println("ingrese valor valido. [numero entre 1 y 7] ");
 
 			}
 
