@@ -182,7 +182,6 @@ public class Main {
 			// bolean find para asegurarme de jugar entre !find para saber si se encontro o
 			// no
 
-			boolean find = false;
 			String nombSolicitud = nombresSolicitud[i];
 			String apeSolicitud = apellidosSolicitud[i];
 
@@ -209,7 +208,6 @@ public class Main {
 				contadorRechazados++;
 			}
 
-
 		}
 		// printeo de 2)Solicitud
 		System.out.println("\nSolicitudes | Filtrado - Ha finalizado\n" + "[RECHAZADOS]: " + contadorRechazados + " \n"
@@ -218,6 +216,8 @@ public class Main {
 	}
 
 	private static void inscripcionManual() {
+		System.out.println(
+				"\n---Metodo de Incorporacion---\n" + "[1]: RUT\n" + "[2]: Nombre y Apellido\n" + "[3]: Salir \n");
 		Scanner sc = new Scanner(System.in);
 		int opcion = 0;
 
@@ -225,28 +225,37 @@ public class Main {
 		 * si esta parte la estoy reutilizado entera hasta nuevo aviso o hasta que
 		 * recuerde como no ser redundante un lunes a las 2:30am
 		 */
-		System.out.print("[TU OPCION]: ");
-		String in = sc.nextLine();
-		try {
-			opcion = Integer.parseInt(in);
-		} catch (NumberFormatException e) {
-			opcion = -1;
-		}
+
 		do {
-			System.out.println(
-					"\n---Metodo de Incorporacion---\n" + "[1]: RUT\n" + "[2]: Nombre y Apellido\n" + "[3]: Salir \n");
+			System.out.print("[TU OPCION]: ");
+			String in = sc.nextLine();
+			try {
+				opcion = Integer.parseInt(in);
+			} catch (NumberFormatException e) {
+				opcion = -1;
+			}
+
 			switch (opcion) {
 			case 1:
-				//RUT
-				
+				// RUT
+				System.out.print("Ingrese RUT (sin puntos, con guion): ");
+				String rut = sc.nextLine().trim();
+
+				for (int i = 0; i < contadorAdmitidos; i++) {
+					if (rut.equalsIgnoreCase(rutsAlumnosAceptados[i]) && rutsAlumnosAceptados != null) {
+						System.out.println("El RUT ingresado ya se encuentra en el grupo: \n" + "[RUT]: " + rut
+								+ "\n[NOMBRE-APELLIDO]: " + nombresAlumnosAceptados[i] + " - "
+								+ apellidosAlumnosAceptados[i] + "\n[PARALELO]: " + paralelosAlumnosAceptados[i]);
+					}
+				}
 
 				break;
 			case 2:
-				//NOMBRE Y APELLIDO
+				// NOMBRE Y APELLIDO
 				break;
 			case 3:
-				//SALIR
-				
+				// SALIR
+
 				break;
 
 			default:
@@ -258,19 +267,39 @@ public class Main {
 
 	}
 
+	/**
+	 * metodo usado para buscar Alumnos por nombre y apellido comparando con
+	 * "equalsIgnoreCase" en listas.
+	 * 
+	 * @param nombre
+	 * @param apellido
+	 * @return: Retorna el indice donde se ubica el Alumno encontrado o -1 en caso
+	 *          de no encontrarlo.
+	 */
 	private static int buscarAlumnoPorNombre(String nombre, String apellido) {
 		for (int j = 0; j < cantidadAlumnos; j++) {
-			/*
-			 * act: devido a que necesito esta funcion tanto para case 2 como case 3, derive
-			 * esto a "buscarAlumnoPorNombre" para evitar redundancia
-			 */
 			if (nombre.equalsIgnoreCase(nombresAlumnos[j]) && apellido.equalsIgnoreCase(apellidosAlumnos[j])) {
 				return j;
-
 			}
 		}
-		// en caso de no encontrarlo.
 		return -1;
+	}
 
+	/**
+	 * metodo usado para buscar Alumnos por RUT. Se verifica si lista rutsAlumnos[i]
+	 * !=null y compara el RUT con el RUT en indice en la Lista
+	 * 
+	 * @param rut
+	 * @return Retorna el indice donde se ubica el Alumno encontrado o -1 en caso de
+	 *         no encontrarlo.
+	 */
+	private static int buscarAlumnoPorRUT(String rut) {
+		for (int i = 0; i < cantidadAlumnos; i++) {
+			if (rutsAlumnos[i] != null && rut.equalsIgnoreCase(rutsAlumnos[i])) {
+				return i;
+			}
+
+		}
+		return -1;
 	}
 }
