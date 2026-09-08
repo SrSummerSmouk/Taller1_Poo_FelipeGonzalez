@@ -114,10 +114,12 @@ public class Main {
 	}
 
 	public static void menu() {
-		System.out.println("---Menu de control - Grupo POO---\n");
 		Scanner scanner = new Scanner(System.in);
 		int opcion = 0;
+		boolean archivosCargados = false;
 		do {
+			System.out.println("\n---Menu de control - Grupo POO---\n");
+
 			System.out.println("1) Cargar Archivos (Alumnos.txt y Solicitudes.txt)\n"
 					+ "2) Procesar Solicitudes - Filtro Automatico\n" + "3) Incripcion Manual al Grupo\n"
 					+ "4) Administracion Del Curso\n" + "5) Generar Reporte\n" + "6) Analisis Estatico\n"
@@ -133,8 +135,6 @@ public class Main {
 				// valor deseado
 				opcion = -1;
 			}
-
-			boolean archivosCargados = false;
 
 			switch (opcion) {
 
@@ -184,7 +184,7 @@ public class Main {
 
 			boolean find = false;
 			String nombSolicitud = nombresSolicitud[i];
-			String apeSolicitud = apellidosAlumnos[i];
+			String apeSolicitud = apellidosSolicitud[i];
 
 			int encontrarJ = buscarAlumnoPorNombre(nombSolicitud, apeSolicitud);
 
@@ -200,24 +200,19 @@ public class Main {
 
 				contadorAdmitidos++;
 				// cambio de find para saber q se encontro
-				find = true;
-				break;
-
-			}
-
-			if (!find) {
-				// same thing pero esta vez para los rechazados
+			} else {
 				System.out.println("[STATUS]: [X] - " + nombSolicitud + " " + apeSolicitud
 						+ " - [No Pertenece A Ningun Paralelo]");
 				nombresAlumnosRechazados[contadorRechazados] = nombSolicitud;
 				apellidosAlumnosRechazados[contadorRechazados] = apeSolicitud;
 
 				contadorRechazados++;
-
 			}
+
+
 		}
 		// printeo de 2)Solicitud
-		System.out.println("\n Solicitudes | Filtrado - Ha finalizado\n " + "[RECHAZADOS]: " + contadorRechazados + "\n"
+		System.out.println("\nSolicitudes | Filtrado - Ha finalizado\n" + "[RECHAZADOS]: " + contadorRechazados + " \n"
 				+ "[ADMITIDOS]: " + contadorAdmitidos);
 
 	}
@@ -225,7 +220,6 @@ public class Main {
 	private static void inscripcionManual() {
 		Scanner sc = new Scanner(System.in);
 		int opcion = 0;
-		System.out.println("\n---Metodo de Incorporacion---\n" + "[1]: RUT\n" + "[2]: Nombre y Apellido\n");
 
 		/*
 		 * si esta parte la estoy reutilizado entera hasta nuevo aviso o hasta que
@@ -238,15 +232,29 @@ public class Main {
 		} catch (NumberFormatException e) {
 			opcion = -1;
 		}
+		do {
+			System.out.println(
+					"\n---Metodo de Incorporacion---\n" + "[1]: RUT\n" + "[2]: Nombre y Apellido\n" + "[3]: Salir \n");
+			switch (opcion) {
+			case 1:
+				//RUT
+				
 
-		switch (opcion) {
-		case 1:
+				break;
+			case 2:
+				//NOMBRE Y APELLIDO
+				break;
+			case 3:
+				//SALIR
+				
+				break;
 
-			break;
+			default:
 
-		default:
-			break;
-		}
+				break;
+			}
+
+		} while (opcion != 3);
 
 	}
 
@@ -261,6 +269,7 @@ public class Main {
 
 			}
 		}
+		// en caso de no encontrarlo.
 		return -1;
 
 	}
