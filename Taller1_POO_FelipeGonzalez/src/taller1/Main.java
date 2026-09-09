@@ -20,6 +20,7 @@ public class Main {
 	static String[] apellidosAlumnosAceptados = new String[100];
 	static String[] rutsAlumnosAceptados = new String[100];
 	static String[] paralelosAlumnosAceptados = new String[100];
+	
 
 	// guardar Alumnos Rechazados
 	static String[] nombresAlumnosRechazados = new String[100];
@@ -156,6 +157,9 @@ public class Main {
 			case 3:
 				inscripcionManual();
 				break;
+			case 4:
+				break;
+				
 
 			case 7:
 				// Salir
@@ -251,7 +255,7 @@ public class Main {
 						apellidosAlumnosAceptados[contadorAdmitidos] = apellidosAlumnos[bapr];
 						rutsAlumnosAceptados[contadorAdmitidos] = rutsAlumnos[bapr];
 						paralelosAlumnosAceptados[contadorAdmitidos] = paralelosAlumnos[bapr];
-						
+
 						System.out.println("\n[STATUS]: SE HA REGISTRADO EL RUT DEL ESTUDIANTE CON EXITO."
 								+ "\n[ESTUDIANTE]: " + nombresAlumnos[bapr] + "\n[RUT]: " + rutsAlumnos[bapr]
 								+ "\n[PARALELO]: " + paralelosAlumnos[bapr]);
@@ -265,9 +269,29 @@ public class Main {
 				break;
 			case 2:
 				// NOMBRE Y APELLIDO
-				
-				
+				System.out.print("Ingrese Nombre y Apellido separa por guion (ejemplo: Alex-Vicente):  ");
+				String nombre = "";
+				String apellido = "";
+				while (true) {
+					String entrada = sc.nextLine().trim();
+
+					if (!entrada.contains("-")) {
+						System.out.println("[ERROR]: REALICE LA SEPARACION COMO ES DEBIDO (ejemplo: Alex-Vicente)");
+						continue;
+					}
+
+					String[] partes = entrada.split(" ");
+					if (partes[0].trim().isEmpty() || partes[1].trim().isEmpty() || partes.length < 2) {
+						System.out.println("[ERROR]: DEBE DE INGRESAR NOMBRE Y APELLIDO.");
+						continue;
+					}
+
+					nombre = partes[0].trim();
+					apellido = partes[1].trim();
+					break;
+				}
 				break;
+
 			case 3:
 				// SALIR
 
@@ -304,6 +328,7 @@ public class Main {
 	 * !=null y compara el RUT con el RUT en indice en la Lista
 	 * 
 	 * @param rut
+	 * 
 	 * @return Retorna el indice donde se ubica el Alumno encontrado o -1 en caso de
 	 *         no encontrarlo.
 	 */
