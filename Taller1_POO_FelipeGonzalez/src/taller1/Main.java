@@ -204,8 +204,6 @@ public class Main {
 
 		// for que cuenta solo cantidad de solicitudes.
 		for (int i = 0; i < cantidadSolicitudes; i++) {
-			// bolean find para asegurarme de jugar entre !find para saber si se encontro o
-			// no
 
 			String nombSolicitud = nombresSolicitud[i];
 			String apeSolicitud = apellidosSolicitud[i];
@@ -302,9 +300,9 @@ public class Main {
 						continue;
 					}
 
-					String[] partes = entrada.split(" ");
-					if (partes[0].trim().isEmpty() || partes[1].trim().isEmpty() || partes.length < 2) {
-						System.out.println("[ERROR]: DEBE DE INGRESAR NOMBRE Y APELLIDO.");
+					String[] partes = entrada.split("-");
+					if (partes[0].trim().isEmpty() || partes[1].trim().isEmpty() || partes.length < 2||partes.length>2) {
+						System.out.println("[ERROR]: DEBE DE INGRESAR NOMBRE Y APELLIDO PRIMARIO.");
 						continue;
 					}
 
@@ -312,6 +310,33 @@ public class Main {
 					apellido = partes[1].trim();
 					break;
 				}
+					int encontrarJ = buscarAlumnoPorNombre(nombre, apellido);
+
+					if (encontrarJ != -1) {
+						if (!metodoConfirmarRutAmitido(rutsAlumnos[encontrarJ])) {
+							System.out.println("[STATUS]: [OK] - " + nombre + " " + apellido + " | Admitido en: "
+									+ paralelosAlumnos[encontrarJ]);
+
+							// guardado de los alumnos admitidos.
+							nombresAlumnosAceptados[contadorAdmitidos] = nombresAlumnos[encontrarJ];
+							apellidosAlumnosAceptados[contadorAdmitidos] = apellidosAlumnos[encontrarJ];
+							rutsAlumnosAceptados[contadorAdmitidos] = rutsAlumnos[encontrarJ];
+							paralelosAlumnosAceptados[contadorAdmitidos] = paralelosAlumnos[encontrarJ];
+
+							contadorAdmitidos++;
+						}
+	
+						// cambio de find para saber q se encontro
+					} else {
+						System.out.println("[STATUS]: [X] - " + nombre + " " + apellido
+								+ " - [No Pertenece A Ningun Paralelo]");
+						nombresAlumnosRechazados[contadorRechazados] = nombre;
+						apellidosAlumnosRechazados[contadorRechazados] = apellido;
+
+						contadorRechazados++;
+					}
+					
+				
 				break;
 
 			case 3:
@@ -377,5 +402,7 @@ public class Main {
 		}
 		return false;
 	}
+	
+	
 
 }
