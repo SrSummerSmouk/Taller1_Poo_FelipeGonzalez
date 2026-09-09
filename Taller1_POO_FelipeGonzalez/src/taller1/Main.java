@@ -1,8 +1,11 @@
 //Felipe Gonzalez - 21.776.516-1 - ITI
 package taller1;
 
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Scanner;
 
 public class Main {
@@ -20,7 +23,6 @@ public class Main {
 	static String[] apellidosAlumnosAceptados = new String[100];
 	static String[] rutsAlumnosAceptados = new String[100];
 	static String[] paralelosAlumnosAceptados = new String[100];
-	
 
 	// guardar Alumnos Rechazados
 	static String[] nombresAlumnosRechazados = new String[100];
@@ -113,6 +115,27 @@ public class Main {
 
 	}
 
+	/**
+	 * sobre escribre el archivo Alumnos.txt
+	 */
+	private static void sobreEscribirAlumnos() {
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter("Alumnos.txt"))) {
+			for (int i = 0; i < cantidadAlumnos; i++) {
+				String linea = nombresAlumnos[i] + ";" + apellidosAlumnos[i] + ";" + rutsAlumnos[i] + ";"
+						+ paralelosAlumnos[i];
+				bw.write(linea);
+				bw.newLine();
+
+			}
+			System.out.println("[STATUS]: Achivo Alumnos.txt actualizado con exito\n");
+		} catch (IOException e) {// tengo 3 horas de sueño, disculpa la falta ortografica si hay algo, no veo muy
+									// bien ahora
+			// TODO: handle exception
+			System.out.println("[ERROR]: NO SE PUEDE SOBREESCRIBIR ALUMNOS.TXT\n");
+		}
+
+	}
+
 	public static void menu() {
 		Scanner scanner = new Scanner(System.in);
 		int opcion = 0;
@@ -159,7 +182,6 @@ public class Main {
 				break;
 			case 4:
 				break;
-				
 
 			case 7:
 				// Salir
