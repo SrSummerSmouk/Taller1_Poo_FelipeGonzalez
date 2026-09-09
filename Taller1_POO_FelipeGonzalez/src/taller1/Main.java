@@ -3,7 +3,6 @@ package taller1;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.util.Iterator;
 import java.util.Scanner;
 
 public class Main {
@@ -216,8 +215,7 @@ public class Main {
 	}
 
 	private static void inscripcionManual() {
-		System.out.println(
-				"\n---Metodo de Incorporacion---\n" + "[1]: RUT\n" + "[2]: Nombre y Apellido\n" + "[3]: Salir \n");
+
 		Scanner sc = new Scanner(System.in);
 		int opcion = 0;
 
@@ -227,6 +225,8 @@ public class Main {
 		 */
 
 		do {
+			System.out.println(
+					"\n---Metodo de Incorporacion---\n" + "[1]: RUT\n" + "[2]: Nombre y Apellido\n" + "[3]: Salir \n");
 			System.out.print("[TU OPCION]: ");
 			String in = sc.nextLine();
 			try {
@@ -241,17 +241,32 @@ public class Main {
 				System.out.print("Ingrese RUT (sin puntos, con guion): ");
 				String rut = sc.nextLine().trim();
 
-				for (int i = 0; i < contadorAdmitidos; i++) {
-					if (rut.equalsIgnoreCase(rutsAlumnosAceptados[i]) && rutsAlumnosAceptados != null) {
-						System.out.println("El RUT ingresado ya se encuentra en el grupo: \n" + "[RUT]: " + rut
-								+ "\n[NOMBRE-APELLIDO]: " + nombresAlumnosAceptados[i] + " - "
-								+ apellidosAlumnosAceptados[i] + "\n[PARALELO]: " + paralelosAlumnosAceptados[i]);
+				// para ver si el rut existe en el grupo (evitar dupli)
+				if (!metodoConfirmarRutAmitido(rut)) {
+					int bapr = buscarAlumnoPorRUT(rut);
+
+					// si no es -1 entonces encontro al alumno en la lista de alumnos
+					if (bapr != -1) {
+						nombresAlumnosAceptados[contadorAdmitidos] = nombresAlumnos[bapr];
+						apellidosAlumnosAceptados[contadorAdmitidos] = apellidosAlumnos[bapr];
+						rutsAlumnosAceptados[contadorAdmitidos] = rutsAlumnos[bapr];
+						paralelosAlumnosAceptados[contadorAdmitidos] = paralelosAlumnos[bapr];
+						
+						System.out.println("\n[STATUS]: SE HA REGISTRADO EL RUT DEL ESTUDIANTE CON EXITO."
+								+ "\n[ESTUDIANTE]: " + nombresAlumnos[bapr] + "\n[RUT]: " + rutsAlumnos[bapr]
+								+ "\n[PARALELO]: " + paralelosAlumnos[bapr]);
+						contadorAdmitidos++;
+					} else {
+						System.out.println("[STATUS]: NO SE HA ENCONTRADO EL RUT EN LA LISTA DE ALUMNOS.");
 					}
+
 				}
 
 				break;
 			case 2:
 				// NOMBRE Y APELLIDO
+				
+				
 				break;
 			case 3:
 				// SALIR
@@ -264,7 +279,6 @@ public class Main {
 			}
 
 		} while (opcion != 3);
-
 	}
 
 	/**
@@ -298,8 +312,23 @@ public class Main {
 			if (rutsAlumnos[i] != null && rut.equalsIgnoreCase(rutsAlumnos[i])) {
 				return i;
 			}
-
 		}
 		return -1;
 	}
+
+	// ya vere si dejo el nombre asi o lo cambio despues
+	// es lo mismo que el case 1, solo lo pase a metodo porque queria hacerlo como
+	// if y honestamente no me salia.
+	private static boolean metodoConfirmarRutAmitido(String rut) {
+		for (int i = 0; i < contadorAdmitidos; i++) {
+			if (rut.equalsIgnoreCase(rutsAlumnosAceptados[i]) && rutsAlumnosAceptados != null) {
+				System.out.println("El RUT ingresado ya se encuentra en el grupo: \n" + "[RUT]: " + rut
+						+ "\n[NOMBRE-APELLIDO]: " + nombresAlumnosAceptados[i] + " - " + apellidosAlumnosAceptados[i]
+						+ "\n[PARALELO]: " + paralelosAlumnosAceptados[i]);
+				return true;
+			}
+		}
+		return false;
+	}
+
 }
