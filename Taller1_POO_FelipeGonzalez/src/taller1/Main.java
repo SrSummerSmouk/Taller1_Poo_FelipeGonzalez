@@ -181,6 +181,12 @@ public class Main {
 				inscripcionManual();
 				break;
 			case 4:
+				if (archivosCargados) {
+					administracionCurso(scanner);
+				} else {
+					System.out.println(
+							"[AVISO]: DEBE DE CARGAR ARCHIVOS ANTES DE INGRESAR - MENU ADMINISTRACION.");
+				}
 				break;
 
 			case 7:
@@ -282,6 +288,9 @@ public class Main {
 						contadorAdmitidos++;
 					} else {
 						System.out.println("[STATUS]: NO SE HA ENCONTRADO EL RUT EN LA LISTA DE ALUMNOS.");
+						nombresAlumnosRechazados[contadorRechazados] = "Sin nombre registrado, RUT: " + rut;
+						apellidosAlumnosRechazados[contadorRechazados] = "";
+						contadorRechazados++;
 					}
 
 				}
@@ -301,7 +310,8 @@ public class Main {
 					}
 
 					String[] partes = entrada.split("-");
-					if (partes[0].trim().isEmpty() || partes[1].trim().isEmpty() || partes.length < 2||partes.length>2) {
+					if (partes[0].trim().isEmpty() || partes[1].trim().isEmpty() || partes.length < 2
+							|| partes.length > 2) {
 						System.out.println("[ERROR]: DEBE DE INGRESAR NOMBRE Y APELLIDO PRIMARIO.");
 						continue;
 					}
@@ -310,33 +320,32 @@ public class Main {
 					apellido = partes[1].trim();
 					break;
 				}
-					int encontrarJ = buscarAlumnoPorNombre(nombre, apellido);
+				int encontrarJ = buscarAlumnoPorNombre(nombre, apellido);
 
-					if (encontrarJ != -1) {
-						if (!metodoConfirmarRutAmitido(rutsAlumnos[encontrarJ])) {
-							System.out.println("[STATUS]: [OK] - " + nombre + " " + apellido + " | Admitido en: "
-									+ paralelosAlumnos[encontrarJ]);
+				if (encontrarJ != -1) {
+					if (!metodoConfirmarRutAmitido(rutsAlumnos[encontrarJ])) {
+						System.out.println("[STATUS]: [OK] - " + nombre + " " + apellido + " | Admitido en: "
+								+ paralelosAlumnos[encontrarJ]);
 
-							// guardado de los alumnos admitidos.
-							nombresAlumnosAceptados[contadorAdmitidos] = nombresAlumnos[encontrarJ];
-							apellidosAlumnosAceptados[contadorAdmitidos] = apellidosAlumnos[encontrarJ];
-							rutsAlumnosAceptados[contadorAdmitidos] = rutsAlumnos[encontrarJ];
-							paralelosAlumnosAceptados[contadorAdmitidos] = paralelosAlumnos[encontrarJ];
+						// guardado de los alumnos admitidos.
+						nombresAlumnosAceptados[contadorAdmitidos] = nombresAlumnos[encontrarJ];
+						apellidosAlumnosAceptados[contadorAdmitidos] = apellidosAlumnos[encontrarJ];
+						rutsAlumnosAceptados[contadorAdmitidos] = rutsAlumnos[encontrarJ];
+						paralelosAlumnosAceptados[contadorAdmitidos] = paralelosAlumnos[encontrarJ];
 
-							contadorAdmitidos++;
-						}
-	
-						// cambio de find para saber q se encontro
-					} else {
-						System.out.println("[STATUS]: [X] - " + nombre + " " + apellido
-								+ " - [No Pertenece A Ningun Paralelo]");
-						nombresAlumnosRechazados[contadorRechazados] = nombre;
-						apellidosAlumnosRechazados[contadorRechazados] = apellido;
-
-						contadorRechazados++;
+						contadorAdmitidos++;
 					}
-					
-				
+
+					// cambio de find para saber q se encontro
+				} else {
+					System.out.println(
+							"[STATUS]: [X] - " + nombre + " " + apellido + " - [No Pertenece A Ningun Paralelo]");
+					nombresAlumnosRechazados[contadorRechazados] = nombre;
+					apellidosAlumnosRechazados[contadorRechazados] = apellido;
+
+					contadorRechazados++;
+				}
+
 				break;
 
 			case 3:
@@ -345,7 +354,7 @@ public class Main {
 				break;
 
 			default:
-
+				System.out.println("[ERROR]: Opcion invalida\n");
 				break;
 			}
 
@@ -393,7 +402,7 @@ public class Main {
 	// if y honestamente no me salia.
 	private static boolean metodoConfirmarRutAmitido(String rut) {
 		for (int i = 0; i < contadorAdmitidos; i++) {
-			if (rut.equalsIgnoreCase(rutsAlumnosAceptados[i]) && rutsAlumnosAceptados != null) {
+			if (rutsAlumnosAceptados[i] != null && rut.equalsIgnoreCase(rutsAlumnosAceptados[i])) {
 				System.out.println("El RUT ingresado ya se encuentra en el grupo: \n" + "[RUT]: " + rut
 						+ "\n[NOMBRE-APELLIDO]: " + nombresAlumnosAceptados[i] + " - " + apellidosAlumnosAceptados[i]
 						+ "\n[PARALELO]: " + paralelosAlumnosAceptados[i]);
@@ -402,7 +411,116 @@ public class Main {
 		}
 		return false;
 	}
-	
-	
+
+	private static void administracionCurso(Scanner scanner) {
+		int opcion = 0;
+		do {
+			System.out.println("\n---Menu de Administracion - Grupo POO---\n" + "1) Agregar nuevo Alumno\n"
+					+ "2) Editar Alumno existente\n" + "3) Eliminar Alumno\n" + "4) Volver al menu principal\n");
+			String in = scanner.nextLine();
+
+			try {
+				opcion = Integer.parseInt(in);
+			} catch (NumberFormatException e) {
+				opcion = -1;
+			}
+			switch (opcion) {
+			case 1:
+				// AGREGAR ALUMNO
+				if (cantidadAlumnos >= 100) {
+					System.out.println("[ERROR]: NO ES POSIBLE AGREGAR A UN ALUMNO NUEVO - (LIMITE 100)\n"
+							+ "[Cantidad de alumnos]: " + cantidadAlumnos);
+					break;
+				}
+				// en caso de que si hay espacio:
+				System.out.print("Ingrese el rut del alumno (con guion): ");
+				String rut = scanner.nextLine().trim();
+
+				if (buscarAlumnoPorRUT(rut) != -1) {
+					System.out.println("[ERROR]: Este RUT ya le pertenece a un alumno del curso.\n");
+					break;
+				}
+				System.out.print("Ingrese Nombre: ");
+				String nombre = scanner.nextLine().trim();
+				System.out.print("Ingrese Apellido: ");
+				String apellido = scanner.nextLine().trim();
+				System.out.print("Ingrese Paralelo (ej: C1): ");
+				String paralelo = scanner.nextLine().trim();
+
+				// nota para recordarme que se me olvida despues:
+				// cantidadAlumnos es el contador = indice que uso para la lista
+				nombresAlumnos[cantidadAlumnos] = nombre;
+				apellidosAlumnos[cantidadAlumnos] = apellido;
+				paralelosAlumnos[cantidadAlumnos] = paralelo;
+				rutsAlumnos[cantidadAlumnos] = rut;
+				cantidadAlumnos++;
+
+				System.out.println("");
+				sobreEscribirAlumnos();
+				break;
+			case 2:
+				// PARA EDITAR ALUMNOS
+				System.out.print("Ingrese RUT del alumno que desea identificar (EDITAR): ");
+				String rutParaEditar = scanner.nextLine().trim();
+
+				int indiceEditor = buscarAlumnoPorRUT(rutParaEditar);
+				if (indiceEditor != -1) {
+					System.out.println(
+							"Alumno actual: " + nombresAlumnos[indiceEditor] + " " + apellidosAlumnos[indiceEditor]
+									+ "\n Ingrese el NUEVO paralelo (ENTER para no cambiarlo)\n");
+					String nuevoParaleloCambio = scanner.nextLine().trim();
+					if (!nuevoParaleloCambio.isEmpty()) {
+						paralelosAlumnos[indiceEditor] = nuevoParaleloCambio;
+						sobreEscribirAlumnos();
+
+					} else {
+						System.out.println("[STATUS]: No se ha realizado cambios\n");
+					}
+
+				} else {
+					System.out.println("[ERROR]: Alumno no encontrado\n");
+
+				}
+
+				break;
+			case 3:
+				// eliminar alumnos
+				System.out.print("Ingrese RUT del alumno que desea ELIMINAR: ");
+				String rutParaEliminar = scanner.nextLine().trim();
+
+				int indiceRutEliminar = buscarAlumnoPorRUT(rutParaEliminar);
+				if (indiceRutEliminar != -1) {
+					for (int i = indiceRutEliminar; i < cantidadAlumnos - 1; i++) {
+						nombresAlumnos[i] = nombresAlumnos[i + 1];
+						apellidosAlumnos[i] = apellidosAlumnos[i + 1];
+						rutsAlumnos[i] = rutsAlumnos[i + 1];
+						paralelosAlumnos[i] = paralelosAlumnos[i + 1];
+					}
+
+					nombresAlumnos[cantidadAlumnos - 1] = null;
+					apellidosAlumnos[cantidadAlumnos - 1] = null;
+					paralelosAlumnos[cantidadAlumnos - 1] = null;
+					rutsAlumnos[cantidadAlumnos - 1] = null;
+					cantidadAlumnos--;
+
+					sobreEscribirAlumnos();
+
+					System.out.println("Alumno eliminado con exito\n");
+					break;
+
+				} else {
+					System.out.println("[ERROR]: Alumno no encontrado. \n");
+					break;
+				}
+			case 4:
+				// SALIR
+				break;
+			default:
+				System.out.println("[ERROR]: Opcion invalida\n");
+				break;
+			}
+
+		} while (opcion != 4);
+	}
 
 }
