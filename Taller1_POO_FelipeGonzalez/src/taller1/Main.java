@@ -33,6 +33,12 @@ public class Main {
 	static int cantidadSolicitudes = 0;
 	static int contadorAdmitidos = 0;
 	static int contadorRechazados = 0;
+	static int contadorReportesC1 = 0;
+	static int contadorReportesC2 = 0;
+
+	static int versionC1 = 1;
+	static int versionC2 = 1;
+	static int versionRechazados = 1;
 
 	public static void main(String[] args) throws FileNotFoundException {
 		// TODO Auto-generated method stub
@@ -184,11 +190,24 @@ public class Main {
 				if (archivosCargados) {
 					administracionCurso(scanner);
 				} else {
-					System.out.println(
-							"[AVISO]: DEBE DE CARGAR ARCHIVOS ANTES DE INGRESAR - MENU ADMINISTRACION.");
+					System.out.println("[AVISO]: DEBE DE CARGAR ARCHIVOS ANTES DE INGRESAR - MENU ADMINISTRACION.");
+				}
+				break;
+			case 5:
+				if (archivosCargados) {
+					generarReportesMenu(scanner);
+				} else {
+					System.out.println("[AVISO]: DEBE DE CARGAR ARCHIVOS ANTES DE GENERAR REPORTES.");
 				}
 				break;
 
+			case 6:
+				if (archivosCargados) {
+					analisisEstadistico();
+				} else {
+					System.out.println("[AVISO]: DEBE DE CARGAR ARCHIVOS ANTES DE VER ESTADISTICAS.");
+				}
+				break;
 			case 7:
 				// Salir
 				System.out.println("[AVISO]: Saliendo del sistema.");
@@ -521,6 +540,151 @@ public class Main {
 			}
 
 		} while (opcion != 4);
+	}
+
+	private static void generarReportesMenu(Scanner sc) {
+
+		System.out.print("[TU OPCION]: ");
+		int opcion = 0;
+
+		do {
+			System.out.println("\n---Generar Reportes---\n" + "1) Reportes del paralelo C1\n"
+					+ "2) Reportes del paralelo C2\n" + "3) Reportes de Rechazados\n" + "4) Salir\n");
+			String in = sc.nextLine();
+
+			try {
+				opcion = Integer.parseInt(in);
+			} catch (NumberFormatException e) {
+				opcion = -1;
+			}
+
+			switch (opcion) {
+			case 1:
+				generarRParalelo("C1");
+				break;
+			case 2:
+				generarRParalelo("C2");
+				break;
+			case 3:
+				generarRRechazos();
+				break;
+			case 4:
+				// salir
+
+				break;
+
+			default:
+				break;
+			}
+		} while (opcion != 4);
+
+	}
+
+	private static void generarRParalelo(String paraleloString) {
+		int versionActual;
+
+		if (paraleloString.equalsIgnoreCase("C1")) {
+			versionActual = versionC1;
+		} else {
+			versionActual = versionC2;
+		}
+		String nombreArchivo = "Reporte" + paraleloString + "-V" + versionActual + ".txt";
+		// aqui tuve que ayudarme mucho con metodos externos, odio bw
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo))) {
+			bw.write("--- Miembros del grupo - Paralelo " + paraleloString + " ---");
+			bw.newLine();
+
+			for (int i = 0; i < contadorAdmitidos; i++) {
+				if (paralelosAlumnosAceptados[i] != null
+						&& paralelosAlumnosAceptados[i].equalsIgnoreCase(paraleloString)) {
+					bw.write(nombresAlumnosAceptados[i] + " " + apellidosAlumnosAceptados[i] + " - "
+							+ rutsAlumnosAceptados[i]);
+					bw.newLine();
+				}
+			}
+
+			System.out.println("[STATUS]: Reporte generado exitosamente: " + nombreArchivo);
+
+			if (paraleloString.equalsIgnoreCase("C1")) {
+				versionC1++;
+			} else {
+				versionC2++;
+			}
+
+		} catch (IOException e) {
+			System.out.println("[ERROR]: No se pudo escribir el archivo de reporte.");
+		}
+
+	}
+
+	private static void generarRRechazos() {
+		String nombreArchivo = "Rechazados-V" + versionRechazados + ".txt";
+
+		try (BufferedWriter bw = new BufferedWriter(new FileWriter(nombreArchivo))) {
+			bw.write("=== Solicitudes rechazadas ===");
+			bw.newLine();
+
+			for (int i = 0; i < contadorRechazados; i++) {
+				if (apellidosAlumnosRechazados[i] == null || apellidosAlumnosRechazados[i].isEmpty()) {
+					bw.write(nombresAlumnosRechazados[i]);
+				} else {
+					bw.write(nombresAlumnosRechazados[i] + " " + apellidosAlumnosRechazados[i]
+							+ " - No pertenece a ningun paralelo del curso");
+				}
+				bw.newLine();
+			}
+
+			System.out.println("[STATUS]: Reporte de rechazados generado exitosamente: " + nombreArchivo);
+			versionRechazados++;
+
+		} catch (IOException e) {
+			System.out.println("[ERROR]: No se pudo escribir el archivo de rechazados.");
+		}
+	}
+
+	private static void analisisEstadistico() {
+		System.out.println("\n--- Analisis estadistico - Menu POO ---\n");
+
+		int totalC1 = 0;
+		int totalC2 = 0;
+
+		for (int i = 0; i < cantidadAlumnos; i++) {
+			if (paralelosAlumnos[i] != null) {
+				if (paralelosAlumnos[i].equalsIgnoreCase("C1")) {
+					totalC1++;
+				} else if (paralelosAlumnos[i].equalsIgnoreCase("C2")) {
+					totalC2++;
+				}
+			}
+		}
+
+		int aceptadosC1 = 0;
+		int aceptadosC2 = 0;
+
+		for (int i = 0; i < contadorAdmitidos; i++) {
+			if (paralelosAlumnosAceptados[i] != null) {
+				if (paralelosAlumnosAceptados[i].equalsIgnoreCase("C1")) {
+					aceptadosC1++;
+				} else if (paralelosAlumnosAceptados[i].equalsIgnoreCase("C2")) {
+					aceptadosC2++;
+				}
+			}
+		}
+		//basicamente los printeos....
+		System.out.println("[1] Alumnos cargados en Alumnos.txt: " + cantidadAlumnos + "\n- Paralelo C1: " + totalC1
+				+ " alumnos" + "\n- Paralelo C2: " + totalC2 + " alumnos");
+
+		System.out.println("\n[2] Estado de Solicitudes:" + "\n- Total Admitidos: " + contadorAdmitidos + " (C1: "
+				+ aceptadosC1 + " - C2: " + aceptadosC2 + ")" + "\n- Total Rechazados: " + contadorRechazados);
+		System.out.println("- Total Rechazados: " + contadorRechazados);
+
+		int totalProcesados = contadorAdmitidos + contadorRechazados;
+		if (totalProcesados > 0) {
+			double porcAdmitidos = ((double) contadorAdmitidos / totalProcesados) * 100;
+			double porcRechazados = ((double) contadorRechazados / totalProcesados) * 100;
+			System.out.printf("- Tasa de Aceptacion: %.2f%%\n", porcAdmitidos);
+			System.out.printf("- Tasa de Rechazo: %.2f%%\n", porcRechazados);
+		}
 	}
 
 }
