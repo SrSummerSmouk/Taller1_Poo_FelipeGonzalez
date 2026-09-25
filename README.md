@@ -4,7 +4,7 @@ Taller1_POO_UCN_Semestre_2_Año_2026
 proyecto perteneciente al taller 1 de Programacion Orientada a objetos perteneciente a:
 https://github.com/Claptzzz/Ayudantias-POO/tree/main/POO%202026/POO-2026-II/Talleres/Taller%2001
 
-Felipe Ignacio González Zuleta | 21.776.516-1 | github username: MrSummerSmouk
+Felipe Ignacio González Zuleta | 21.776.516-1 | github username: SrSummerSmouk
 
 intrucciones de ejecucion: 
 Menu en consola de comandos - posee 
