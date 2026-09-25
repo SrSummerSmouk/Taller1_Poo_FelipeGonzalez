@@ -14,7 +14,7 @@ Menu en consola de comandos - posee
 * **administracion de curso** = permite la eliminacion o modificacion de un alumno y la agregacion de alumnos 
 * **generadores de reportes** = permite seleccionar entre generaciones de reportes para paralelos c1 y c2 ademas de los rechazados
 * **analisis estadistico** = permite visualizar datos y valores como:
-        *  alumnos rechazados
-        *  alumnos aceptados
-        *  alumnos en paralelo C1 Y C2
-        *  tasa de aceptacion y rechazo 
+  * Alumnos rechazados
+  * Alumnos aceptados
+  * Alumnos en paralelo C1 y C2
+  * Tasa de aceptación y rechazo
