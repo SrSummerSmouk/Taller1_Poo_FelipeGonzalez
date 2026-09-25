@@ -8,13 +8,13 @@ Felipe Ignacio González Zuleta | 21.776.516-1 | github username: MrSummerSmouk
 
 intrucciones de ejecucion: 
 Menu en consola de comandos - posee 
-*carga de archivos* = la carga de archivos con control de errores y verificacion de que ambos archivos sean cargados
-*ordenar archivo* = ordenamiento automaico de aceptados y rechazados en las verifacion.
-*incripcion manual* = incripcion manual de alumnos con verificacion de de rut o nombre
-*administracion de curso* = permite la eliminacion o modificacion de un alumno y la agregacion de alumnos 
-*generadores de reportes* = permite seleccionar entre generaciones de reportes para paralelos c1 y c2 ademas de los rechazados
-*analisis estadistico* = permite visualizar datos y valores como:
-        - alumnos rechazados
-        - alumnos aceptados
-        - alumnos en paralelo C1 Y C2
-        - tasa de aceptacion y rechazo 
+* **carga de archivos** = la carga de archivos con control de errores y verificacion de que ambos archivos sean cargados
+* **ordenar archivo** = ordenamiento automaico de aceptados y rechazados en las verifacion.
+* **incripcion manual** = incripcion manual de alumnos con verificacion de de rut o nombre
+* **administracion de curso** = permite la eliminacion o modificacion de un alumno y la agregacion de alumnos 
+* **generadores de reportes** = permite seleccionar entre generaciones de reportes para paralelos c1 y c2 ademas de los rechazados
+* **analisis estadistico** = permite visualizar datos y valores como:
+        *  alumnos rechazados
+        *  alumnos aceptados
+        *  alumnos en paralelo C1 Y C2
+        *  tasa de aceptacion y rechazo 
